@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EditLine Productions - Admin Dashboard</title>
+    <link rel="stylesheet" href="assets/css/admin-styles.css">
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="loginScreen" class="login-container">
+        <div class="login-box">
+            <h1>EditLine Admin</h1>
+            <p>Manage your business</p>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="password">Admin Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            <a href="/" class="back-link">← Back to Website</a>
+        </div>
+    </div>
+
+    <!-- Admin Dashboard -->
+    <div id="dashboardScreen" class="dashboard-container" style="display: none;">
+        <!-- Header -->
+        <header class="admin-header">
+            <div class="header-content">
+                <h1>EditLine Admin Dashboard</h1>
+                <div class="header-actions">
+                    <button id="refreshBtn" class="btn btn-secondary">Refresh</button>
+                    <button id="logoutBtn" class="btn btn-secondary">Logout</button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="admin-content">
+            <!-- Tabs Navigation -->
+            <div class="admin-tabs">
+                <button class="tab-btn active" data-tab="messages">Messages</button>
+                <button class="tab-btn" data-tab="content">Website Content</button>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Total Messages</h3>
+                    <p class="stat-number" id="totalMessages">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>New Messages</h3>
+                    <p class="stat-number" id="newMessages">0</p>
+                </div>
+                <div class="stat-card">
+                    <h3>Your Clients</h3>
+                    <p class="stat-number" id="totalClients">0</p>
+                </div>
+            </div>
+
+            <!-- Messages Tab -->
+            <div id="messagesTab" class="tab-content active">
+
+            <!-- Messaging Section -->
+            <div class="messaging-section">
+                <h2>Client Messages</h2>
+                
+                <!-- Filters -->
+                <div class="filters">
+                    <select id="serviceFilter" class="filter-select">
+                        <option value="">All Services</option>
+                        <option value="video">Video Editing</option>
+                        <option value="audio">Audio Editing</option>
+                        <option value="photo">Photo Editing</option>
+                        <option value="line">Line Editing</option>
+                    </select>
+                    <select id="statusFilter" class="filter-select">
+                        <option value="">All Status</option>
+                        <option value="unread">Unread</option>
+                        <option value="read">Read</option>
+                        <option value="replied">Replied</option>
+                    </select>
+                    <input type="text" id="searchBox" class="filter-input" placeholder="Search by name or email...">
+                </div>
+
+                <!-- Messages List -->
+                <div class="messages-list" id="messagesList">
+                    <p class="empty-state">No messages yet. Messages from clients will appear here.</p>
+                </div>
+            </div>
+            </div>
+
+            <!-- Content Manager Tab -->
+            <div id="contentTab" class="tab-content">
+                <div class="content-manager">
+                    <h2>Manage Website Content</h2>
+                    
+                    <!-- Hero Section -->
+                    <div class="content-section">
+                        <h3>Hero Section</h3>
+                        <div class="form-group">
+                            <label>Main Title</label>
+                            <input type="text" id="heroTitle" placeholder="Professional Editing Services" class="content-input">
+                        </div>
+                        <div class="form-group">
+                            <label>Subtitle</label>
+                            <input type="text" id="heroSubtitle" placeholder="Video • Audio • Photo • Line Editing" class="content-input">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea id="heroDescription" placeholder="Transform your content with professional-grade editing expertise" class="content-input" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Management -->
+                    <div class="content-section">
+                        <h3>Portfolio</h3>
+                        <div id="portfolioItems"></div>
+                        <button type="button" class="btn btn-secondary" onclick="addPortfolioItem()" style="width: auto; margin-top: 1rem;">Add Portfolio Item</button>
+                    </div>
+
+                    <!-- Services Descriptions -->
+                    <div class="content-section">
+                        <h3>Services Descriptions</h3>
+                        <div id="serviceItems"></div>
+                    </div>
+
+                    <!-- Save Button -->
+                    <button type="button" class="btn btn-primary" onclick="saveContent()" style="margin-top: 2rem; width: auto;">Save All Changes</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Message Detail Modal -->
+        <div id="messageModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Client Message</h2>
+                    <button class="close-btn">&times;</button>
+                </div>
+                
+                <div class="modal-body">
+                    <div class="message-detail">
+                        <div class="detail-row">
+                            <label>From:</label>
+                            <span id="modalName"></span>
+                        </div>
+                        <div class="detail-row">
+                            <label>Email:</label>
+                            <span id="modalEmail"></span>
+                            <a href="" id="emailLink" class="copy-btn">Copy</a>
+                        </div>
+                        <div class="detail-row">
+                            <label>Service:</label>
+                            <span id="modalService"></span>
+                        </div>
+                        <div class="detail-row">
+                            <label>Date:</label>
+                            <span id="modalDate"></span>
+                        </div>
+                        <div class="detail-row">
+                            <label>Message:</label>
+                            <p id="modalMessage"></p>
+                        </div>
+                    </div>
+
+                    <!-- Reply Section -->
+                    <div class="reply-section">
+                        <h3>Send Reply</h3>
+                        <form id="replyForm">
+                            <textarea id="replyText" placeholder="Type your reply..." required style="width: 100%; padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 0.25rem; font-family: inherit; min-height: 100px;"></textarea>
+                            <div style="margin-top: 1rem;">
+                                <button type="submit" class="btn btn-primary" style="margin-right: 0.5rem;">Send Reply</button>
+                                <button type="button" class="btn btn-secondary mark-btn">Mark as Read</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Previous Replies -->
+                    <div id="repliesHistory" style="margin-top: 2rem; display: none;">
+                        <h3>Reply History</h3>
+                        <div id="repliesList"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div id="notification" class="notification" style="display: none;"></div>
+
+    <script src="assets/js/admin.js"></script>
+</body>
+</html>
