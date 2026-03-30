@@ -54,13 +54,6 @@ body {
     font-weight: 700;
 }
 
-.nav-logo {
-    height: 80px;
-    width: auto;
-    margin-right: 1.5rem;
-    vertical-align: middle;
-}
-
 .nav-menu {
     display: flex;
     list-style: none;
@@ -324,6 +317,29 @@ body {
 .contact-form .btn {
     width: 100%;
     margin-top: 1rem;
+}
+
+.contact-form .btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.form-status {
+    min-height: 1.5rem;
+    margin-top: 1rem;
+    font-weight: 600;
+}
+
+.form-status.info {
+    color: var(--accent-color);
+}
+
+.form-status.success {
+    color: #15803d;
+}
+
+.form-status.error {
+    color: #dc2626;
 }
 
 .contact-info {
