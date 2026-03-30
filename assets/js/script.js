@@ -1,6 +1,7 @@
 // Load Dynamic Content from Admin
 document.addEventListener('DOMContentLoaded', function() {
     loadDynamicContent();
+    setupContactForm();
 });
 
 function loadDynamicContent() {
@@ -37,60 +38,108 @@ function loadDynamicContent() {
 }
 
 // Form submission handler
-document.getElementById('contactForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
-    // Get form values
-    const name = document.getElementById('name').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const service = document.getElementById('service').value;
-    const message = document.getElementById('message').value.trim();
-    
-    // Validate form
-    if (!name || !email || !service || !message) {
-        alert('Please fill in all fields');
-        return;
-    }
-    
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-        alert('Please enter a valid email address');
-        return;
-    }
-    
-    // Save message to localStorage
-    saveClientMessage({
-        name: name,
-        email: email,
-        service: service,
-        message: message,
-        timestamp: new Date().getTime()
-    });
-    
-    // Show success message
-    alert('Thank you for your message! We will contact you soon.');
-    
-    // Reset form
-    this.reset();
-});
+const MESSAGES_KEY = 'editline_messages';
 
-// Save client message to localStorage
-function saveClientMessage(clientMessage) {
-    const MESSAGES_KEY = 'editline_messages';
-    const stored = localStorage.getItem(MESSAGES_KEY);
-    const messages = stored ? JSON.parse(stored) : [];
-    
-    // Create message with auto-increment ID
-    const newMessage = {
-        id: messages.length > 0 ? Math.max(...messages.map(m => m.id)) + 1 : 1,
-        ...clientMessage,
+function setupContactForm() {
+    const contactForm = document.getElementById('contactForm');
+
+    if (!contactForm) {
+        return;
+    }
+
+    const emailInput = document.getElementById('email');
+    const replyToField = document.getElementById('replytoField');
+
+    if (emailInput && replyToField) {
+        replyToField.value = emailInput.value.trim();
+        emailInput.addEventListener('input', () => {
+            replyToField.value = emailInput.value.trim();
+        });
+    }
+
+    contactForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const submitButton = this.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.textContent;
+        const formData = new FormData(this);
+        const email = formData.get('email');
+        const name = formData.get('name');
+        const service = formData.get('service');
+        const message = formData.get('message');
+
+        if (email) {
+            formData.set('_replyto', email);
+        }
+
+        formData.set('_subject', `New ${service || 'service'} inquiry from ${name || 'website visitor'}`);
+
+        submitButton.disabled = true;
+        submitButton.textContent = 'Sending...';
+        updateFormStatus('Sending your message...', 'info');
+
+        try {
+            const response = await fetch(this.action, {
+                method: this.method,
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+
+            const result = await response.json().catch(() => ({}));
+
+            if (!response.ok) {
+                const errorMessage = result.errors?.map(error => error.message).join(', ') || 'Unable to send your message right now.';
+                throw new Error(errorMessage);
+            }
+
+            saveMessageToAdminInbox({
+                name,
+                email,
+                service,
+                message
+            });
+
+            this.reset();
+            updateFormStatus('Thank you! Your message has been sent successfully.', 'success');
+        } catch (error) {
+            console.error('Contact form submission failed:', error);
+            updateFormStatus(error.message || 'A network error prevented the message from being sent.', 'error');
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = originalButtonText;
+        }
+    });
+}
+
+function saveMessageToAdminInbox({ name, email, service, message }) {
+    const storedMessages = localStorage.getItem(MESSAGES_KEY);
+    const messages = storedMessages ? JSON.parse(storedMessages) : [];
+
+    messages.unshift({
+        id: Date.now(),
+        name,
+        email,
+        service,
+        message,
         status: 'unread',
+        timestamp: Date.now(),
         replies: []
-    };
-    
-    messages.push(newMessage);
+    });
+
     localStorage.setItem(MESSAGES_KEY, JSON.stringify(messages));
+}
+
+function updateFormStatus(message, type) {
+    const statusElement = document.getElementById('formStatus');
+
+    if (!statusElement) {
+        return;
+    }
+
+    statusElement.textContent = message;
+    statusElement.className = `form-status ${type}`;
 }
 
 // Smooth scroll for navigation links
