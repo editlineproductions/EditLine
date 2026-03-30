@@ -186,6 +186,20 @@ body {
     padding: 2rem 20px;
 }
 
+.hosting-notice {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    color: #1e3a8a;
+    padding: 1rem 1.25rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.content-note {
+    margin: 0.5rem 0 1.5rem;
+    color: #6b7280;
+}
+
 /* Stats Grid */
 .stats-grid {
     display: grid;
