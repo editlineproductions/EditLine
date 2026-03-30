@@ -1,6 +1,8 @@
 # EditLine Productions - Professional Editing Services Website
 
-A modern, responsive website for EditLine Productions, specializing in professional video, audio, photo, and line editing services. Includes a **private admin dashboard** for managing client messages and communications.
+A modern, responsive website for EditLine Productions, specializing in professional video, audio, photo, and line editing services. It is set up to run as a **static GitHub Pages site** with the contact form delivered through **Formspree**.
+
+> **GitHub Pages note:** the live site is static. Contact emails are handled by Formspree, and any browser-based "admin" tools only affect the local browser unless you edit the files and push changes to GitHub.
 
 ## Features
 
@@ -19,7 +21,8 @@ A modern, responsive website for EditLine Productions, specializing in professio
 ```
 EditLine/
 ├── index.html              # Main website
-├── admin.html              # Private admin dashboard
+├── a7f9k2m1x.html          # Private admin dashboard (renamed for security)
+├── .htaccess               # Security rules for admin access
 ├── assets/
 │   ├── css/
 │   │   ├── styles.css      # Website styling
@@ -40,6 +43,16 @@ EditLine/
 - **JavaScript**: Vanilla JS with localStorage for data persistence
 - **Responsive**: Mobile-first design approach
 - **Security**: Password-protected admin dashboard
+
+## Security Features
+
+- **Hidden Admin Access**: Admin dashboard accessible via secret URL only (`a7f9k2m1x.html`)
+- **No Public Links**: Admin link removed from public navigation
+- **Password Protection**: Dashboard requires password authentication
+- **.htaccess Rules**: Additional server-level protection (Apache servers)
+- **Referer Validation**: Access restricted to authorized domains
+
+**Admin Access**: `https://yourdomain.com/a7f9k2m1x.html`
 
 ## Sections
 

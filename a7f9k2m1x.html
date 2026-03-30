@@ -11,7 +11,7 @@
     <div id="loginScreen" class="login-container">
         <div class="login-box">
             <h1>EditLine Admin</h1>
-            <p>Manage your business</p>
+            <p>GitHub Pages owner tools</p>
             <form id="loginForm">
                 <div class="form-group">
                     <label for="password">Admin Password</label>
@@ -19,7 +19,7 @@
                 </div>
                 <button type="submit" class="btn btn-primary">Login</button>
             </form>
-            <a href="/" class="back-link">← Back to Website</a>
+            <a href="./index.html" class="back-link">← Back to Website</a>
         </div>
     </div>
 
@@ -38,6 +38,10 @@
 
         <!-- Main Content -->
         <div class="admin-content">
+            <div class="hosting-notice">
+                <strong>GitHub Pages mode:</strong> contact form submissions are delivered by Formspree to <strong>editlineproductions@gmail.com</strong>. The tools on this page only save local notes and preview data in this browser.
+            </div>
+
             <!-- Tabs Navigation -->
             <div class="admin-tabs">
                 <button class="tab-btn active" data-tab="messages">Messages</button>
@@ -47,15 +51,15 @@
             <!-- Stats -->
             <div class="stats-grid">
                 <div class="stat-card">
-                    <h3>Total Messages</h3>
+                    <h3>Local Messages</h3>
                     <p class="stat-number" id="totalMessages">0</p>
                 </div>
                 <div class="stat-card">
-                    <h3>New Messages</h3>
+                    <h3>Unread Local</h3>
                     <p class="stat-number" id="newMessages">0</p>
                 </div>
                 <div class="stat-card">
-                    <h3>Your Clients</h3>
+                    <h3>Local Senders</h3>
                     <p class="stat-number" id="totalClients">0</p>
                 </div>
             </div>
@@ -87,7 +91,7 @@
 
                 <!-- Messages List -->
                 <div class="messages-list" id="messagesList">
-                    <p class="empty-state">No messages yet. Messages from clients will appear here.</p>
+                    <p class="empty-state">On GitHub Pages, new submissions arrive in Formspree and by email. This list only shows local test copies from this browser.</p>
                 </div>
             </div>
             </div>
@@ -96,6 +100,7 @@
             <div id="contentTab" class="tab-content">
                 <div class="content-manager">
                     <h2>Manage Website Content</h2>
+                    <p class="content-note">For the live GitHub Pages site, edit the files in the repository and push to GitHub. The editor below is only a local browser preview.</p>
                     
                     <!-- Hero Section -->
                     <div class="content-section">
@@ -168,11 +173,11 @@
 
                     <!-- Reply Section -->
                     <div class="reply-section">
-                        <h3>Send Reply</h3>
+                        <h3>Reply Notes</h3>
                         <form id="replyForm">
-                            <textarea id="replyText" placeholder="Type your reply..." required style="width: 100%; padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 0.25rem; font-family: inherit; min-height: 100px;"></textarea>
+                            <textarea id="replyText" placeholder="Type your internal note..." required style="width: 100%; padding: 0.75rem; border: 1px solid #e5e7eb; border-radius: 0.25rem; font-family: inherit; min-height: 100px;"></textarea>
                             <div style="margin-top: 1rem;">
-                                <button type="submit" class="btn btn-primary" style="margin-right: 0.5rem;">Send Reply</button>
+                                <button type="submit" class="btn btn-primary" style="margin-right: 0.5rem;">Save Reply Note</button>
                                 <button type="button" class="btn btn-secondary mark-btn">Mark as Read</button>
                             </div>
                         </form>
@@ -180,7 +185,7 @@
 
                     <!-- Previous Replies -->
                     <div id="repliesHistory" style="margin-top: 2rem; display: none;">
-                        <h3>Reply History</h3>
+                        <h3>Reply Notes History</h3>
                         <div id="repliesList"></div>
                     </div>
                 </div>

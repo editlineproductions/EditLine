@@ -1,0 +1,15 @@
+# Bloquer l'accès direct aux fichiers admin
+<Files "a7f9k2m1x.html">
+    Require all denied
+</Files>
+
+# Bloquer l'accès aux fichiers admin par pattern
+<FilesMatch "^[a-zA-Z0-9]{10}\.html$">
+    Require all denied
+</FilesMatch>
+
+# Autoriser seulement depuis le même domaine (Referer)
+<RequireAll>
+    Require all granted
+    Require expr "%{HTTP_REFERER} =~ m#^https?://(localhost|127\.0\.0\.1|.*\.github\.io|.*\.vercel\.app|.*\.netlify\.app)#"
+</RequireAll>
